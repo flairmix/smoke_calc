@@ -71,3 +71,5 @@ strc_2.calc_starcase_all()
 strc_2.create_df()
 strc_2.starcase_df_to_csv()
 
+print("test")
+
