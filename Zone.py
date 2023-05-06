@@ -72,6 +72,6 @@ class Zone():
     def calc_Gk_smoke_flow(self):
         '''массовый расход продуктов горения в конвективной колонке'''
         if self.z1_fire_high and self.z1_fire_high > self.z:
-            self.Gk_smoke_flow = 0.071 * pow(0.7 * self.Qf, 0.33) * pow(self.H - self.h, 1.666) * 0.0018(0.7 * self.Qf)
+            self.Gk_smoke_flow = 0.071 * pow(0.7 * self.Qf, 0.33) * pow(self.H - self.h, 1.666) * 0.0018*(0.7 * self.Qf)
         else: 
             self.Gk_smoke_flow = 0.032 * pow(0.7 * self.Qf, 0.6) * (self.H - self.h)
