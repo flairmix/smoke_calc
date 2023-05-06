@@ -112,8 +112,12 @@ def smoke_exhaust_coridor(room:Room, opening_list,
                 room.smoke_density,
                 room.smoke_consumption_vol         
                 ]
-
-
+                             
+    for i in range (0, len(parameter)):
+        if type(parameter[i]) == float:
+            parameter[i] = round(parameter[i], 2)
+            
+            
     units = ["-",
              "м2",
              "м",
