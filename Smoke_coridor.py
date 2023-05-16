@@ -1,6 +1,6 @@
 import pandas as pd
-
 from Room import Room
+from Room import CALORIFIC_VALUE_WOOD
 
 
 def smoke_exhaust_coridor(room:Room, opening_list, 
@@ -36,11 +36,14 @@ def smoke_exhaust_coridor(room:Room, opening_list,
     room.calc_smoke_consumption_vol()
 
 
-    name_parameter = ["Наименование обслуживаемого помещения",
+    name_parameter = ["Коридор",
+                    "Наименование обслуживаемого помещения", 
                     "Площадь пола помещения", 
                     "Высота помещения",
                     "Объём помещения",
                     "Суммарная площадь внутренней поверхности ограждающих строительных конструкций",
+                    "Проем №1 ширина",
+                    "Проем №1 высота",
                     "Суммарная площадь проемов помещения",
                     "Низшая теплота сгорания древесины",
                     "Плотность пожарной нагрузки помещения", 
@@ -76,14 +79,16 @@ def smoke_exhaust_coridor(room:Room, opening_list,
 
                     ]
 
-    parameter = [
+    parameter = ["-",
                 room.name, 
                 room.area_m2,
                 room.high_m,
                 room.room_volume_m3,
                 room.Fw,
+                room.corridor_door_width,
+                room.corridor_door_hight,
                 room.A0,
-                13.8, 
+                CALORIFIC_VALUE_WOOD, 
                 room.fire_load_density,
                 
                 room.Fw_unit_fire_load_by_walling,
@@ -93,7 +98,7 @@ def smoke_exhaust_coridor(room:Room, opening_list,
                 room.unit_fire_load_critical,
                 room.unit_fire_load_by_floor_square,
                 
-                room.fire_type,
+                "Регулируемый вентиляцией" if room.fire_type.value == 1 else "Регулируемый нагрузкой",
                 room.temp_inside,
                 room.temp_inside+273,
                 room.max_temp,
@@ -119,10 +124,13 @@ def smoke_exhaust_coridor(room:Room, opening_list,
             
             
     units = ["-",
+             "-",
              "м2",
              "м",
              "м3",
              "м2",
+             "м",
+             "м",
              "м2",
              "МДж/кг",
              "МДж/м2",
@@ -145,24 +153,22 @@ def smoke_exhaust_coridor(room:Room, opening_list,
              "K",
              "K",
              "-",
-             "-",
-             "-",
+             "м",
+             "м",
              "м2",
              "кг/с",
-             "-",
+             "кг/м3",
              "м3/ч",
             ]
 
-    comments = ["-" for i in range(len(name_parameter))]
-    formulas = ["-" for i in range(len(name_parameter))]
+
     sign = ["-" for i in range(len(name_parameter))]
 
 
     data = pd.DataFrame(name_parameter, columns=["Характеристика"])
     data["sign"] = sign
     data["Ед.измерения"] = units
-    data["formulas"] = formulas
     data["Значения"] = parameter
-    data["Примечания"] = comments
+
 
     return data

@@ -2,6 +2,9 @@ from enum import Enum
 from math import exp
 
 
+CALORIFIC_VALUE_WOOD = 13.8 #Низшая теплота сгорания древесины
+
+
 class Fire_type(Enum):
     FIRE_BY_VENT = 1
     FIRE_BY_FIRELOAD = 2
@@ -107,7 +110,7 @@ class Room():
         """
         self.fire_load_density = fire_load_density
 
-    def calc_Fw_unit_fire_load_by_walling(self, heat_value_wood=13.8):
+    def calc_Fw_unit_fire_load_by_walling(self):
         """
         2. gk - удельная приведенная пожарная нагрузка, отнесенная к площади тепловоспринимающей поверхности
         ограждающих строительных конструкций, кг/м2
@@ -115,7 +118,7 @@ class Room():
         """
         self.Fw_unit_fire_load_by_walling = (
             self.area_m2 * self.fire_load_density) / (
-                (self.Fw - self.A0) * heat_value_wood)
+                (self.Fw - self.A0) * CALORIFIC_VALUE_WOOD)
 
     def get_calorific_value_fire_load(self, calorific_value_fire_load: float):
         """
@@ -158,13 +161,13 @@ class Room():
             (1 + (500 * self.room_opening_rate**3))) + (
                 (self.room_volume_m3**0.33) / (6 * self.v0_air_for_burn))
 
-    def calc_unit_fire_load_by_floor_square(self, heat_value_wood=13.8):
+    def calc_unit_fire_load_by_floor_square(self):
         """
         Удельная приведенная пожарная нагрузка, отнесенная к площади пола помещения
         кг/м2
         Приложение 1 МР 2013
         """
-        self.unit_fire_load_by_floor_square = self.fire_load_density / heat_value_wood
+        self.unit_fire_load_by_floor_square = self.fire_load_density / CALORIFIC_VALUE_WOOD
 
     def define_type_of_fire(self):
         """
@@ -246,5 +249,3 @@ class Room():
     def calc_smoke_consumption_vol(self):
         self.smoke_consumption_vol = 3600 * (self.smoke_consumption_mass /
                                              self.smoke_density)
-    
-
