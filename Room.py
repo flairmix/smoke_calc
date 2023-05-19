@@ -16,7 +16,9 @@ class Room():
 
     def __init__(self, name, area_m2: float, high_m: float,
                  fire_load_density: float, calorific_value_fire_load: list,
-                 calorific_value_fire_load_mass: list):
+                 calorific_value_fire_load_mass: list,
+                temp_inside :int = 24,
+                corridor_temp : int = 24):
         self.add_id()
         Room.items.append(self)
         self.id = self.id[-1]
@@ -44,7 +46,7 @@ class Room():
         # Вид объемного пожара
         self.fire_type = Fire_type.FIRE_BY_VENT
         # Начальная температура воздуха в помещении
-        self.temp_inside: int = 24
+        self.temp_inside = temp_inside
         self.temp_inside_K: int = 273 + self.temp_inside
         # Максимальная среднеобъемная температура в помещении K
         self.max_temp: int = 0
@@ -57,8 +59,8 @@ class Room():
         self.corridor_lenght = 0
         # Предельная толщина дымового слоя
         self.corridor_smoke_hight_limit = 0
-        self.corridor_temp: int = 0
-        self.corridor_temp_K: int = 0
+        self.corridor_temp = corridor_temp
+        self.corridor_temp_K = self.corridor_temp + 273
         self.corridor_smoke_temp = 0
         self.coef_building_type = 1.2
         self.corridor_door_area = 0
@@ -67,7 +69,7 @@ class Room():
         self.smoke_consumption_vol = 0
 
     def __str__(self):
-        return f"id-{self.id}, name - {self.name}"
+        return f"Room: id-{self.id}, name - {self.name}"
 
     def get_rooms(self):
         return [str(room) for room in Room.items]
@@ -180,7 +182,7 @@ class Room():
         """
         self.fire_type.FIRE_BY_VENT if self.Fw_unit_fire_load_by_walling > self.unit_fire_load_critical else self.fire_type.FIRE_BY_FIRELOAD
 
-    def get_temp_inside(self, temp_inside=24):
+    def get_temp_inside(self, temp_inside : int):
         self.temp_inside = temp_inside
 
     def calc_max_temp(self):
@@ -219,7 +221,7 @@ class Room():
 
     def get_corridor_temp(self, corridor_temp: float = 24):
         self.corridor_temp = corridor_temp
-        self.corridor_temp_K = corridor_temp + 273
+        self.corridor_temp_K = self.corridor_temp + 273
 
     def calc_corridor_smoke_temp(self):
         a = self.corridor_temp_K

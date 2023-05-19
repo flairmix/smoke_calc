@@ -5,54 +5,6 @@ class Elevator_4():
     id = [0]
     items = {}
 
-    def __init__(self,
-                 name,
-                 lvl_amount,
-                 lvl_height: list,
-                 elevator_shaft_area,
-                 elevator_cabin_area,
-                 lvl_doors_height: list,
-                 lvl_doors_widts: list,
-                 wind=2,
-                 Tr=18,
-                 Ta=-26
-                ):
-
-        self.add_id()
-        self.id = self.id[-1]
-        Elevator_4.items[self.id] = self
-        self.name: str = name
-                    
-        self.lvl_amount = lvl_amount
-        self.elevator_shaft_area = elevator_shaft_area
-        self.elevator_cabin_area = elevator_cabin_area
-        self.lvl_height = lvl_height
-        self.lvl_doors_height = lvl_doors_height
-        self.lvl_doors_widts = lvl_doors_widts
-        self.lvl_doors_area = [x * y for x, y in zip(self.lvl_doors_height, self.lvl_doors_widts) ]
-
-        self.wind = wind
-        self.Tr, self.Ta, = Tr, Ta
-        self.Tl = int(0.5 * (self.Ta + self.Tr))
-        self.Dns_r = round(353 / (self.Tr + 273), 2)
-        self.Dns_a = round(353 / (self.Ta + 273), 2)
-        self.Dns_l = round(353 / (self.Tl + 273), 2)
-
-        self.Pl2 = 0
-        self.Pli = [0]
-                    
-        self.Gli = [0]
-        self.dGli = [0]
-
-        self.fan_G_m3_h = 0
-        self.fan_P_Pa = 0
-
-        self.lvl_height_h0s = 5 #разность между уровнями расположения приемного устройства и верхов ЛК, м
-        self.P_h0s_losses = 60 #потери давления в сети от вентилятора до ЛК
-
-        self.data = pd.DataFrame()
-
-
     @classmethod
     def get_elevators_4(cls):
         return [str(elevators_4) for elevators_4 in Elevator_4.items]
@@ -60,25 +12,69 @@ class Elevator_4():
     @classmethod
     def get_elevator_4_by_id(cls, id):
         return Elevator_4.items[id]
+        
+    def __init__(self,
+                 name : str,
+                 lvl_amount : int,
+                 lvl_height: list,
+                 elevator_shaft_area : float,
+                 elevator_cabin_area : float,
+                 lvl_doors_height: list,
+                 lvl_doors_widts: list,
+                 wind : float = 2,
+                 Tr : int = 18,
+                 Ta : int = -26
+                ):
+        self.add_id()
+        self.id = self.id[-1]
+        Elevator_4.items[self.id] = self
+        self.name = name      
+        self.lvl_amount = lvl_amount
+        self.elevator_shaft_area = elevator_shaft_area
+        self.elevator_cabin_area = elevator_cabin_area
+        self.lvl_height = lvl_height
+        self.lvl_doors_height = lvl_doors_height
+        self.lvl_doors_widts = lvl_doors_widts
+        self.lvl_doors_area : list = [x * y for x, y in zip(self.lvl_doors_height, self.lvl_doors_widts) ]
+        self.wind = wind
+        self.Tr, self.Ta, = Tr, Ta
+        self.Tl = int(0.5 * (self.Ta + self.Tr))
+        self.Dns_r = round(353 / (self.Tr + 273), 2)
+        self.Dns_a = round(353 / (self.Ta + 273), 2)
+        self.Dns_l = round(353 / (self.Tl + 273), 2)
+        self.Pl2 = 0 #pressure on lvl_2 door 
+        self.Pli = [0] #pressure on lvl_i door       
+        self.Gli = [0] #airflow commulative with losses on lvl_i   
+        self.dGli = [0] #airflow through closed doors on lvl_i
+        self.fan_G_m3_h = 0 #fan airflow characteristic
+        self.fan_P_Pa = 0 #fan pressure characteristic
+        self.lvl_height_h0s = 5 #разность между уровнями расположения приемного устройства и верхов ЛК, м
+        self.P_h0s_losses = 60 #потери давления в сети от вентилятора до ЛК
+        self.data = pd.DataFrame()
+
     
-    def __str__(self):
+    def __str__(self) -> str:
         return f"id-{self.id}, name - {self.name}"
     
-    def add_id(self):
+    def add_id(self) -> None:
         Elevator_4.id.append(self.id[-1] + 1)
-
-    def calc_pressure_lvl2(self):
-        '''Расчет давления на этаже выше первого надземного, Па'''
-        self.Pl2 = round(
-                        20 -
-                        (9.81 * (self.lvl_height[0] + 0.5 * self.lvl_doors_height[1]) * (self.Dns_l - self.Dns_r)) +
-                         (0.25 * (1.4) * self.Dns_a * pow(self.wind, 2))             
-                        , 2)
+        
+    def create_elevator(self) -> None:
+        Elevator_4.items[self.id] = self 
+        
+    def delete_elevator(self) -> None:
+        del items[self.id] 
+        
+    #calculations 
+    def calc_pressure_lvl2(self) -> None:
+        '''Calculation pressure on the close lift door no the second floor, Pa
+            Расчет давления на этаже выше первого надземного, Па'''
+        self.Pl2 = round(20 - (9.81 * (self.lvl_height[0] + 0.5 * self.lvl_doors_height[1]) * (self.Dns_l - self.Dns_r)) + (0.25 * (1.4) * self.Dns_a * pow(self.wind, 2)), 2)
         self.Pli.append(self.Pl2 for i in range(1, len(self.Pli)))
-   
-
-   
-    def calc_Gl1(self):
+      
+    def calc_Gl1(self) -> None:
+        '''Calculation airflow through open lift door on the ground floor, m3/h;
+            Расчет расхода воздуха через открытую дверь лифта на первом этаже, м3/ч'''
         self.Gsa = round(
             pow((2 * self.Dns_l / (
                 ((4.3+(self.elevator_cabin_area/self.elevator_shaft_area))**2))
