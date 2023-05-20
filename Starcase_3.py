@@ -32,9 +32,7 @@ class Starcase_3():
         self.lvl_height = lvl_height
         self.lvl_doors_height = lvl_doors_height
         self.lvl_doors_widts = lvl_doors_widts
-        self.lvl_doors_area = [
-            x * y for x, y in zip(self.lvl_doors_height, self.lvl_doors_widts)
-        ]
+        self.lvl_doors_area = [x * y for x, y in zip(self.lvl_doors_height, self.lvl_doors_widts)]
         self.starcase_local_resistance = starcase_local_resistance
         self.vestibule_local_resistance = vestibule_local_resistance
         self.door_local_resistance = door_local_resistance

@@ -12,14 +12,18 @@ class Fire_type(Enum):
 
 class Room():
     id = [0]
+    systemname_items = {}
     items = []
-
-    def __init__(self, name, area_m2: float, high_m: float,
+    
+    def __init__(self, systemname: str, 
+                 name, area_m2: float, high_m: float,
                  fire_load_density: float, calorific_value_fire_load: list,
-                 calorific_value_fire_load_mass: list,
                 temp_inside :int = 24,
                 corridor_temp : int = 24):
+        
+        self.systemname = systemname
         self.add_id()
+        self.add_systemname_item(self)
         Room.items.append(self)
         self.id = self.id[-1]
         self.name: str = name
@@ -34,7 +38,7 @@ class Room():
         self.Fw_Fw_unit_fire_load_by_walling: float = 0
         #Средняя теплота сгорания пожарной нагрузки
         self.calorific_value_fire_load = calorific_value_fire_load
-        self.calorific_value_fire_load_mass = calorific_value_fire_load_mass
+        self.calorific_value_fire_load_mass = []
         # V0 Удельное количество воздуха, необходимое для полного сгораняи пожарной нагрузки
         self.v0_air_for_burn: float = 0
         # Проемность помещения
@@ -69,34 +73,40 @@ class Room():
         self.smoke_consumption_vol = 0
 
     def __str__(self):
-        return f"Room: id-{self.id}, name - {self.name}"
+        return f"class Room: id-{self.id}, system - {self.systemname}, name - {self.name}"
 
-    def get_rooms(self):
+    def get_rooms(self) -> list:
         return [str(room) for room in Room.items]
 
-    def add_id(self):
+    def add_id(self) -> None:
         self.id.append(self.id[-1] + 1)
 
-    def get_area_m2(self, area_m2):
+    def add_systemname_item(cls, self) -> None:
+        if self.systemname not in cls.systemname_items:
+            cls.systemname_items[self.systemname] = [self]
+        else:
+            cls.systemname_items[self.systemname].append(self)
+
+    def get_area_m2(self, area_m2)-> None:
         self.area_m2 = area_m2
 
-    def get_high_m(self, high_m):
+    def get_high_m(self, high_m)-> None:
         self.high_m = high_m
 
-    def calc_room_volume_m3(self):
+    def calc_room_volume_m3(self)-> None:
         self.room_volume_m3 = self.area_m2 * self.high_m
 
-    def calc_Fw(self):
+    def calc_Fw(self)-> None:
         """
         Суммарная площадь внутренней поверхности ограждающих строительных конструкций
         Приложение 1 МР 2013
         """
         self.Fw = round(6 * pow(self.room_volume_m3, 0.667), 2)
 
-    def get_opening_list(self, opening_list_m2: list):
+    def get_opening_list(self, opening_list_m2: list)-> None:
         self.opening_list_m2 = opening_list_m2
 
-    def calc_A0(self):
+    def calc_A0(self)-> None:
         """
         Суммарная площадь проемов помещения
         Приложение 1 МР 2013. 
@@ -104,7 +114,7 @@ class Room():
         """
         self.A0 = sum(self.opening_list_m2)
 
-    def get_fire_load_density(self, fire_load_density: int):
+    def get_fire_load_density(self, fire_load_density: int)-> None:
         """
         Плотность пожарной нагрузки помещения
         q_п
@@ -112,7 +122,7 @@ class Room():
         """
         self.fire_load_density = fire_load_density
 
-    def calc_Fw_unit_fire_load_by_walling(self):
+    def calc_Fw_unit_fire_load_by_walling(self)-> None:
         """
         2. gk - удельная приведенная пожарная нагрузка, отнесенная к площади тепловоспринимающей поверхности
         ограждающих строительных конструкций, кг/м2
@@ -129,7 +139,7 @@ class Room():
         """
         self.calorific_value_fire_load = calorific_value_fire_load
 
-    def calc_v0_air_for_burn(self):
+    def calc_v0_air_for_burn(self)-> None:
         """
         V0 - Удельное количество воздуха, необходимое для полного сгорания пожарной нагрузки помещения, 
         м3/кг
@@ -144,15 +154,13 @@ class Room():
 
         self.v0_air_for_burn = 0.263 * self.calorific_value_fire_load
 
-    def calc_room_opening_rate(self, hight_opening: float):
+    def calc_room_opening_rate(self, hight_opening: float)-> None:
         """
         П - Проемность помещения, pow(м, 0.5)
         """
-        self.room_opening_rate = round(
-            self.A0 * pow(hight_opening, 0.5) / pow(self.room_volume_m3, 0.66),
-            3)
+        self.room_opening_rate = round(self.A0 * pow(hight_opening, 0.5) / pow(self.room_volume_m3, 0.66), 3)
 
-    def calc_unit_fire_load_critical(self):
+    def calc_unit_fire_load_critical(self)-> None:
         """
         Удельное критическое количество пожарной нагрузки
         кг/м2
@@ -163,7 +171,7 @@ class Room():
             (1 + (500 * self.room_opening_rate**3))) + (
                 (self.room_volume_m3**0.33) / (6 * self.v0_air_for_burn))
 
-    def calc_unit_fire_load_by_floor_square(self):
+    def calc_unit_fire_load_by_floor_square(self)-> None:
         """
         Удельная приведенная пожарная нагрузка, отнесенная к площади пола помещения
         кг/м2
@@ -171,7 +179,7 @@ class Room():
         """
         self.unit_fire_load_by_floor_square = self.fire_load_density / CALORIFIC_VALUE_WOOD
 
-    def define_type_of_fire(self):
+    def define_type_of_fire(self)-> None:
         """
         Вид объемного пожара
         gk > gkкр = ПРВ
@@ -182,14 +190,11 @@ class Room():
         """
         self.fire_type.FIRE_BY_VENT if self.Fw_unit_fire_load_by_walling > self.unit_fire_load_critical else self.fire_type.FIRE_BY_FIRELOAD
 
-    def get_temp_inside(self, temp_inside : int):
+    def get_temp_inside(self, temp_inside : int)-> None:
         self.temp_inside = temp_inside
 
-    def calc_max_temp(self):
-        """
-        Максимальная среднеобъемная температура в помещении K
-
-        """
+    def calc_max_temp(self)-> None:
+        """ Максимальная среднеобъемная температура в помещении K"""
         if self.fire_type == Fire_type.FIRE_BY_VENT:
             self.max_temp = self.temp_inside_K + 940 * exp(
                 0.0047 * self.unit_fire_load_by_floor_square - 0.141)
@@ -197,33 +202,33 @@ class Room():
             self.max_temp = self.temp_inside_K + 224 * pow(
                 self.Fw_unit_fire_load_by_walling, 0.528)
 
-    def calc_temp_smoke_coridor(self):
+    def calc_temp_smoke_coridor(self)-> None:
         """	Максимальная среднеобъемная температура в помещении"""
         self.temp_smoke_coridor = 0.8 * self.max_temp
 
-    def get_corridor_hight(self, corridor_hight: float):
+    def get_corridor_hight(self, corridor_hight: float)-> None:
         self.corridor_hight = corridor_hight
 
-    def get_corridor_door_hight(self, corridor_door_hight: float):
+    def get_corridor_door_hight(self, corridor_door_hight: float)-> None:
         self.corridor_door_hight = corridor_door_hight
 
-    def get_corridor_door_width(self, corridor_door_width: float):
+    def get_corridor_door_width(self, corridor_door_width: float)-> None:
         self.corridor_door_width = corridor_door_width
 
-    def get_corridor_area(self, corridor_area: float):
+    def get_corridor_area(self, corridor_area: float)-> None:
         self.corridor_area = corridor_area
 
-    def get_corridor_lenght(self, corridor_lenght: float):
+    def get_corridor_lenght(self, corridor_lenght: float)-> None:
         self.corridor_lenght = corridor_lenght
 
     def calc_corridor_smoke_hight_limit(self, h=0.55):
         self.corridor_smoke_hight_limit = self.corridor_hight * h
 
-    def get_corridor_temp(self, corridor_temp: float = 24):
+    def get_corridor_temp(self, corridor_temp: float = 24)-> None:
         self.corridor_temp = corridor_temp
         self.corridor_temp_K = self.corridor_temp + 273
 
-    def calc_corridor_smoke_temp(self):
+    def calc_corridor_smoke_temp(self)-> None:
         a = self.corridor_temp_K
         b = (1.22 * (self.temp_smoke_coridor - self.corridor_temp_K) *
              (2 * self.corridor_smoke_hight_limit +
@@ -235,19 +240,19 @@ class Room():
 
         self.corridor_smoke_temp = a + b * c
 
-    def calc_corridor_door_area(self):
+    def calc_corridor_door_area(self)-> None:
         self.corridor_door_area = self.corridor_door_width * self.corridor_door_hight
 
-    def get_coef_building_type(self, coef_building_type: float = 1.2):
+    def get_coef_building_type(self, coef_building_type: float = 1.2)-> None:
         self.coef_building_type = coef_building_type
 
-    def calc_smoke_consumption_mass(self):
+    def calc_smoke_consumption_mass(self)-> None:
         self.smoke_consumption_mass = self.coef_building_type * self.corridor_door_area * pow(
             self.corridor_door_hight, 0.5)
 
-    def calc_smoke_density(self):
+    def calc_smoke_density(self)-> None:
         self.smoke_density = 353 / self.corridor_smoke_temp
 
-    def calc_smoke_consumption_vol(self):
+    def calc_smoke_consumption_vol(self)-> None:
         self.smoke_consumption_vol = 3600 * (self.smoke_consumption_mass /
                                              self.smoke_density)

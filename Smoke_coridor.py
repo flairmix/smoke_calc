@@ -161,14 +161,11 @@ def smoke_exhaust_coridor(room:Room, opening_list,
              "м3/ч",
             ]
 
-
     sign = ["-" for i in range(len(name_parameter))]
-
 
     data = pd.DataFrame(name_parameter, columns=["Характеристика"])
     data["sign"] = sign
     data["Ед.измерения"] = units
     data["Значения"] = parameter
-
 
     return data
