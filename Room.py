@@ -87,6 +87,16 @@ class Room():
         else:
             cls.systemname_items[self.systemname].append(self)
 
+    @classmethod
+    def get_rooms_by_system_and_name(cls, system:str, room_names:list):
+        rooms = cls.systemname_items[system]
+        rooms_result = []
+        for room in rooms: 
+            if room.name in room_names:
+                rooms_result.append(room)
+        # print(rooms_result)
+        return rooms_result
+    
     def get_area_m2(self, area_m2)-> None:
         self.area_m2 = area_m2
 

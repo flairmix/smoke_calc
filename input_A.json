@@ -1,0 +1,103 @@
+{
+  "building": "building_A",
+  "coridors": [    
+    {
+      "number": "n-1",
+      "lvl": 1,
+      "name": "Вестибюль",
+      "corridor_length": 30,
+      "corridor_hight": 5.4,
+      "area": 337.3,
+      "corridor_temp": 18,
+      "coef_building_type": 1.2,
+      "rooms": [
+        {
+          "number": "np-2.1",
+          "name": "1эт_Аптечный пункт",
+          "area": 38.4,
+          "high_m": 5.4,
+          "fire_load_density": 1600,
+          "calorific_value_fire_load": 14.5,
+          "temp_inside": 18,
+          "corridor_door_width": 0.8,
+          "corridor_door_hight": 2.1
+        },
+        {
+          "number": "np-5.1",
+          "name": "Арендное помещение",
+          "area": 73.4,
+          "high_m": 5.4,
+          "fire_load_density": 1300,
+          "calorific_value_fire_load": 14.5,
+          "temp_inside": 18,
+          "corridor_door_width": 0.8,
+          "corridor_door_hight": 2.1
+        },
+        {
+          "number": "np-4.1",
+          "name": "Торговый павильон 1",
+          "area": 48.3,
+          "high_m": 5.4,
+          "fire_load_density": 800,
+          "calorific_value_fire_load": 14.5,
+          "temp_inside": 18,
+          "corridor_door_width": 0.8,
+          "corridor_door_hight": 2.1
+        },
+        {
+          "number": "np-3.1",
+          "name": "Торговый павильон 2",
+          "area": 143.5,
+          "high_m": 5.4,
+          "fire_load_density": 800,
+          "calorific_value_fire_load": 14.5,
+          "temp_inside": 18,
+          "corridor_door_width": 0.8,
+          "corridor_door_hight": 2.1
+        },
+        {
+          "number": "np-1.1",
+          "name": "Обеденный зал",
+          "area": 349.0,
+          "high_m": 5.4,
+          "fire_load_density": 600,
+          "calorific_value_fire_load": 14.5,
+          "temp_inside": 18,
+          "corridor_door_width": 0.8,
+          "corridor_door_hight": 2.1
+        }
+      ]
+    },
+    {
+      "number": "t-2",
+      "lvl": 2,
+      "name": "technical coridor",
+      "length": 15,
+      "width": 1.5,
+      "area": 30,
+      "corridor_temp": 18,
+      "rooms": [
+        {
+          "number": "room_number3",
+          "name": "room_name1",
+          "area": 35.5,
+          "high_m": 3.5,
+          "fire_load_density": 1300,
+          "calorific_value_fire_load": [14],
+          "temp_inside": 18
+        },
+        {
+          "number": "room_number4",
+          "name": "room_name2",
+          "area": 35.5,
+          "high_m": 3.5,
+          "fire_load_density": 800,
+          "calorific_value_fire_load": [14],
+          "temp_inside": 18
+        }
+      ]
+    }
+  ]
+}
+
+
