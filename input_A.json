@@ -21,6 +21,7 @@
           "temp_inside": 18,
           "corridor_door_width": 0.8,
           "corridor_door_hight": 2.1
+          "corridor_door_hight": 2.1
         },
         {
           "number": "np-5.1",
