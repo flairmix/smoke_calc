@@ -7,25 +7,63 @@ from Zone import Zone
 from Smoke_coridor import Coridor
 from Starcase_3 import Starcase_3
 
-import A_coridor_1
-import A_coridor_2
-import A_coridor_3
-import B_coridor_1
-import B_coridor_2
-import B_coridor_3
-import C_coridor_1
-import C_coridor_2
-import C_coridor_3
-import D_coridor_3
+from Air_lock import Airlock
 
-pd.set_option('display.max_colwidth', None)
-
-with open('input_A.json') as input_A_file:
-    input_A_data = json.loads(input_A_file.read())
+# import A_coridor_1
+# import A_coridor_2
+# import A_coridor_3
+# import B_coridor_1
+# import B_coridor_2
+# import B_coridor_3
+# import C_coridor_1
+# import C_coridor_2
+# import C_coridor_3
+# import D_coridor_3
 
 
+# pd.set_option('display.max_colwidth', None)
 
-print(input_A_data["coridors"][0]["rooms"])
+
+# with open('input_A.json') as input_A_file:
+#     input_A_data = json.loads(input_A_file.read())
+
+
+air_lock1 = Airlock(
+    "ПД.bA.№8",
+    "Тамбур №1",
+    "Тамбур на первом этаже, выход на ЛК в подземный этаж",
+    door_hight_m = 2.1, 
+    door_width_m = 1.0,
+    airlock_lvl_m = 0.0,
+    deep_of_building_m = -3.2,
+    height_difference_m = 2,
+    temp_outside_С = -26,
+    temp_inside_С= 18,
+    velocity_m_s= 1.3,
+    other_pressure_Pa = 80
+)
+air_lock1.create_report_df()
+air_lock1.create_report_csv()
+
+air_lock2 = Airlock(
+    "ПД.bA.№7",
+    "Тамбур №2",
+    "Тамбур (лифтовый холл) лифта в подвале с режимом «перевозка пожарных подразделений»",
+    door_hight_m = 2.1, 
+    door_width_m = 1.0,
+    airlock_lvl_m = -3.2,
+    deep_of_building_m = -3.2,
+    height_difference_m = 2 + 3.2,
+    temp_outside_С = -26,
+    temp_inside_С= 18,
+    velocity_m_s= 1.3,
+    other_pressure_Pa = 80
+)
+air_lock2.create_report_df()
+air_lock2.create_report_csv()
+print(air_lock2.data)
+
+# print(input_A_data["coridors"][0]["rooms"])
 
 # A_coridor_1.smoke_system_coridor_1()
 # A_coridor_2.smoke_system_coridor_2()
