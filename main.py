@@ -1,5 +1,4 @@
 import coridors_calc
-from Room import Room 
 
 
 path_rooms_A = r'11692/bA/bA_room_categories.csv'

@@ -1,8 +1,8 @@
 from enum import Enum
 from math import exp
 
-CALORIFIC_VALUE_WOOD = 13.8  #Низшая теплота сгорания древесины
-
+# Низшая теплота сгорания древесины
+CALORIFIC_VALUE_WOOD = 13.8
 
 class Fire_type(Enum):
     FIRE_BY_VENT = 1
@@ -38,35 +38,35 @@ class Room():
         self.Fw: float = round(6 * pow(self.room_volume_m3, 0.667), 2)
         self.opening_list_m2: list = []
         self.A0: float = 0
-        #Плотность пожарной нагрузки помещения
+        # Плотность пожарной нагрузки помещения
         self.fire_load_density: float = fire_load_density
         self.Fw_Fw_unit_fire_load_by_walling: float = 0
-        #Средняя теплота сгорания пожарной нагрузки
+        # Средняя теплота сгорания пожарной нагрузки
         self.calorific_value_fire_load = calorific_value_fire_load
         self.calorific_value_fire_load_mass = []
-        # V0 Удельное количество воздуха, необходимое для полного сгораняи пожарной нагрузки
+        #  V0 Удельное количество воздуха, необходимое для полного сгораняи пожарной нагрузки
         self.v0_air_for_burn: float = 0
-        # Проемность помещения
+        #  Проемность помещения
         self.room_opening_rate: float = 0
-        #gkkr Удельное критическое количество пожарной нагрузки
+        # gkkr Удельное критическое количество пожарной нагрузки
         self.unit_fire_load_critical = 0
-        # g0 Удельная приведенная пожарная нагрузка, отнесенная к площади пола помещения
+        #  g0 Удельная приведенная пожарная нагрузка, отнесенная к площади пола помещения
         self.unit_fire_load_by_floor_square = 0
-        # Вид объемного пожара
+        #  Вид объемного пожара
         self.fire_type = Fire_type.FIRE_BY_VENT
-        # Начальная температура воздуха в помещении
+        #  Начальная температура воздуха в помещении
         self.temp_inside = temp_inside
         self.temp_inside_K: int = 273 + self.temp_inside
-        # Максимальная среднеобъемная температура в помещении K
+        #  Максимальная среднеобъемная температура в помещении K
         self.max_temp: int = 0
-        # Максимальная среднеобъемная температура в коридоре K
+        #  Максимальная среднеобъемная температура в коридоре K
         self.temp_smoke_coridor: int = 0
         self.corridor_hight = 0
         self.corridor_door_hight = 0
         self.corridor_door_width = 0
         self.corridor_area = 0
         self.corridor_lenght = 0
-        # Предельная толщина дымового слоя
+        #  Предельная толщина дымового слоя
         self.corridor_smoke_hight_limit = 0
         self.corridor_temp = corridor_temp
         self.corridor_temp_K = self.corridor_temp + 273
@@ -100,7 +100,7 @@ class Room():
         for room in rooms:
             if room.name in room_names:
                 rooms_result.append(room)
-        # print(rooms_result)
+        #  print(rooms_result)
         return rooms_result
 
     def get_area_m2(self, area_m2) -> None:
@@ -161,12 +161,12 @@ class Room():
         м3/кг
         Приложение 1 МР 2013
         """
-        # для расчета при списке пожарных нагрузок со списком масс
-        # i = 0
-        # for f, b in zip(self.calorific_value_fire_load, self.calorific_value_fire_load_mass):
-        #     i += b * f/sum(self.calorific_value_fire_load_mass)
+        #  для расчета при списке пожарных нагрузок со списком масс
+        #  i = 0
+        #  for f, b in zip(self.calorific_value_fire_load, self.calorific_value_fire_load_mass):
+        #      i += b * f/sum(self.calorific_value_fire_load_mass)
 
-        # self.v0_air_for_burn = round((0.263 * i ), 2)
+        #  self.v0_air_for_burn = round((0.263 * i ), 2)
 
         self.v0_air_for_burn = 0.263 * float(self.calorific_value_fire_load)
 
